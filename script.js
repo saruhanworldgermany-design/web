@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const teamGrid = document.getElementById('teamGrid');
 
-    // Sunucu kapalıyken veya yerel açılışta kullanılacak SVG avatar şablonu
+    // Sunucu kapalıyken veya hata durumunda kullanılacak SVG avatar şablonu
     const svgAvatarFallback = `
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="team-avatar" style="padding: 22px; background: rgba(255,255,255,0.02); display: block;">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (teamGrid) {
         teamGrid.innerHTML = ''; // Temizle
+
+        // Eğer sayfa file:// protokolü ile açılmışsa, yerel sunucu adresini (http://localhost:3000) baz al.
+        // Aksi takdirde sunucu üzerinde çalışacağı için göreceli yol kullan.
+        const apiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
 
         teamMembers.forEach(member => {
             // Kart alanını oluştur
@@ -36,37 +40,27 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             teamGrid.appendChild(card);
 
-            // Eğer sayfa yerelde (file:// protokolüyle çift tıklanarak) açıldıysa direkt yerel şablon verileri göster
-            if (window.location.protocol === 'file:') {
-                const mockNames = {
-                    '1313475119716368485': { global_name: 'Castellan Owner', username: 'castellan' },
-                    '578816597054193664': { global_name: 'Admin User', username: 'admin' },
-                    '384385365815066624': { global_name: 'Developer User', username: 'developer' }
-                };
-
-                const mock = mockNames[member.id] || { global_name: 'Ekip Üyesi', username: 'ekip' };
-                setTimeout(() => {
-                    renderCardData(card, mock.global_name, mock.username, null);
-                }, 200);
-            } else {
-                // Sunucuda çalışırken Node.js API üzerinden Discord'dan gerçek verileri çek
-                fetch(`/api/member/${member.id}`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Network response error');
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data && !data.error) {
-                            renderCardData(card, data.global_name, data.username, data.avatar_url);
-                        } else {
-                            showFallback(card, member.id);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Discord API verisi çekilirken hata oluştu:', error);
+            // API üzerinden Discord kullanıcı verilerini çek
+            fetch(`${apiBase}/api/member/${member.id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('API request failed');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && !data.error && data.avatar_url) {
+                        renderCardData(card, data.global_name, data.username, data.avatar_url);
+                    } else if (data && !data.error) {
+                        // Eğer API çalıştı ama avatar URL boş geldiyse (fallback durumu)
+                        renderCardData(card, data.global_name, data.username, null);
+                    } else {
                         showFallback(card, member.id);
-                    });
-            }
+                    }
+                })
+                .catch(error => {
+                    // Sunucu çalışmıyorsa veya ağ hatası oluştuysa otomatik olarak yerel yedek verileri göster
+                    console.log(`[INFO] Sunucu bağlantısı kurulamadı veya API hatası oluştu. Yedek şablon yükleniyor: ${member.id}`);
+                    showFallback(card, member.id);
+                });
         });
     }
 
