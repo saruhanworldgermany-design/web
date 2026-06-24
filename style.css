@@ -21,11 +21,10 @@ body {
     color: var(--text-white);
     font-family: 'Oswald', sans-serif;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: relative;
+    scroll-behavior: smooth;
 }
 
 /* Background Grid & Glow Effects */
@@ -44,16 +43,18 @@ body {
 }
 
 
-/* Container */
-.container {
+/* Hero Section */
+.hero-section {
     width: 100%;
-    max-width: 1200px;
+    min-height: 100vh;
     padding: 2rem;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 4.5rem;
+    gap: 2.2rem;
     z-index: 2;
+    position: relative;
     text-align: center;
 }
 
@@ -98,8 +99,23 @@ body {
     color: var(--text-muted);
     max-width: 600px;
     line-height: 1.6;
-    margin-top: 1.2rem;
+    margin: 1.2rem auto 0 auto;
     letter-spacing: 0.04em;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.section-divider {
+    width: 100%;
+    max-width: 600px;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--border-color),
+        transparent
+    );
+    margin: 1rem 0;
     opacity: 0.8;
 }
 
@@ -241,7 +257,7 @@ body {
         padding: 3rem 1rem;
     }
 
-    .container {
+    .hero-section {
         gap: 3rem;
     }
 
@@ -281,5 +297,194 @@ body {
     .social-card::after {
         left: 20%;
         bottom: 5px;
+    }
+}
+
+/* Team Section */
+.team-section {
+    width: 100%;
+    max-width: 900px;
+    padding: 1rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.team-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.08em;
+    color: var(--text-white);
+    text-align: center;
+    margin-bottom: 0.2rem;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.team-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.8rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1),
+                border-color var(--transition-speed) ease,
+                background var(--transition-speed) ease;
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 42, 42, 0.3);
+    background: rgba(255, 42, 42, 0.01);
+}
+
+.team-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    object-fit: cover;
+    transition: border-color var(--transition-speed) ease,
+                transform var(--transition-speed) ease;
+}
+
+.team-card:hover .team-avatar {
+    border-color: var(--accent-red);
+    transform: scale(1.05);
+}
+
+.team-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.team-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-white);
+    letter-spacing: 0.05em;
+}
+
+.team-username {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    opacity: 0.7;
+    margin-bottom: 0.2rem;
+}
+
+.team-role {
+    font-size: 0.8rem;
+    color: var(--accent-red);
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+    }
+}
+
+/* Floating Discord Button */
+.discord-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(20, 20, 20, 0.85);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999;
+    transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1),
+                border-color var(--transition-speed) ease,
+                background-color var(--transition-speed) ease;
+}
+
+.discord-float-icon {
+    width: 26px;
+    height: 26px;
+    fill: var(--text-white);
+    transition: fill var(--transition-speed) ease;
+}
+
+.discord-float:hover {
+    transform: scale(1.1) translateY(-3px);
+    border-color: var(--accent-red);
+    background-color: rgba(255, 42, 42, 0.08);
+    box-shadow: 0 6px 24px rgba(255, 42, 42, 0.15);
+}
+
+.discord-float:hover .discord-float-icon {
+    fill: var(--accent-red);
+}
+
+/* Tooltip */
+.discord-float-tooltip {
+    position: absolute;
+    right: 75px;
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 1px solid var(--border-color);
+    color: var(--text-white);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-speed) ease,
+                transform var(--transition-speed) ease;
+    transform: translateX(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.discord-float:hover .discord-float-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+    .discord-float {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .discord-float-icon {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .discord-float-tooltip {
+        display: none; /* Hide tooltips on mobile devices */
     }
 }
