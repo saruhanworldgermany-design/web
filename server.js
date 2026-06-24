@@ -101,17 +101,24 @@ app.get('/api/member/:id', (req, res) => {
 });
 
 function getFallbackMock(userId) {
-    const mockNames = {
-        '1313475119716368485': { username: 'castellan', global_name: 'Castellan Owner' },
-        '578816597054193664': { username: 'admin', global_name: 'Admin User' },
-        '384385365815066624': { username: 'developer', global_name: 'Developer User' }
+    const mockData = {
+        '1313475119716368485': { 
+            username: 'ugurrr', 
+            global_name: 'uguRRR',
+            avatar_url: 'https://cdn.discordapp.com/avatars/1313475119716368485/a_7291697a08708aaf3e3671bf55c59ffd.gif?size=1024&animated=true'
+        },
+        '578816597054193664': { 
+            username: 'saruhanworld', 
+            global_name: 'saruhanworld',
+            avatar_url: 'https://cdn.discordapp.com/avatars/578816597054193664/a_1c3fcfca3a142790586c5c41c16842a4.gif?size=1024&animated=true'
+        },
+        '384385365815066624': { 
+            username: 'lyuex', 
+            global_name: 'lyuex',
+            avatar_url: 'https://cdn.discordapp.com/avatars/384385365815066624/a_1458b46df81cd042b09c595564ee3ee6.gif?size=1024&animated=true'
+        }
     };
-    const mock = mockNames[userId] || { username: 'ekip', global_name: 'Ekip Üyesi' };
-    return {
-        username: mock.username,
-        global_name: mock.global_name,
-        avatar_url: '' // Will trigger inline SVG icon fallback on client
-    };
+    return mockData[userId] || { username: 'ekip', global_name: 'Ekip Üyesi', avatar_url: '' };
 }
 
 // Redirect all other queries to index.html

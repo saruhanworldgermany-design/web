@@ -102,12 +102,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showFallback(cardElement, userId) {
         const mockNames = {
-            '1313475119716368485': { global_name: 'Castellan Owner', username: 'castellan' },
-            '578816597054193664': { global_name: 'Admin User', username: 'admin' },
-            '384385365815066624': { global_name: 'Developer User', username: 'developer' }
+            '1313475119716368485': { 
+                global_name: 'uguRRR', 
+                username: 'ugurrr', 
+                avatar_url: 'https://cdn.discordapp.com/avatars/1313475119716368485/a_7291697a08708aaf3e3671bf55c59ffd.gif?size=1024&animated=true' 
+            },
+            '578816597054193664': { 
+                global_name: 'saruhanworld', 
+                username: 'saruhanworld', 
+                avatar_url: 'https://cdn.discordapp.com/avatars/578816597054193664/a_1c3fcfca3a142790586c5c41c16842a4.gif?size=1024&animated=true' 
+            },
+            '384385365815066624': { 
+                global_name: 'lyuex', 
+                username: 'lyuex', 
+                avatar_url: 'https://cdn.discordapp.com/avatars/384385365815066624/a_1458b46df81cd042b09c595564ee3ee6.gif?size=1024&animated=true' 
+            }
         };
 
-        const mock = mockNames[userId] || { global_name: 'Ekip Üyesi', username: 'ekip' };
-        renderCardData(cardElement, mock.global_name, mock.username, null);
+        const mock = mockNames[userId] || { global_name: 'Ekip Üyesi', username: 'ekip', avatar_url: null };
+        renderCardData(cardElement, mock.global_name, mock.username, mock.avatar_url);
     }
 });
