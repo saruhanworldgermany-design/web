@@ -553,6 +553,11 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Fallback catch-all for POST queries: redirect to GET /
+app.post('*', (req, res) => {
+    res.redirect('/');
+});
+
 app.listen(PORT, () => {
     console.log(`\n======================================================`);
     console.log(`Server started successfully!`);
