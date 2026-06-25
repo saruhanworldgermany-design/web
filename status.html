@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASTELLAN - Kontrol Paneli</title>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.8">
+</head>
+<body>
+    <div class="grid-overlay"></div>
+
+    <div class="status-section">
+        <!-- Back button to shop -->
+        <div style="display: flex; justify-content: flex-start; width: 100%; max-width: 750px; z-index: 5; margin-bottom: -1rem;">
+            <a href="shop.html" class="btn-back" style="margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Mağaza
+            </a>
+        </div>
+
+        <!-- Header Title -->
+        <header class="header" style="margin-top: 1rem;">
+            <h1 class="title">BOT <span class="accent-cyan">KONTROL PANELİ</span></h1>
+            <p class="description">Lisans anahtarınızla başlatılan canlı izleyici botu durumunu anlık olarak buradan takip edebilir ve dilediğiniz an durdurabilirsiniz.</p>
+        </header>
+
+        <!-- Status Dashboard -->
+        <div class="status-container" id="statusCard">
+            <!-- Left Side: Circular Progress -->
+            <div class="status-left">
+                <div class="progress-container">
+                    <svg class="progress-svg" viewBox="0 0 120 120">
+                        <circle class="progress-bg" cx="60" cy="60" r="54" />
+                        <circle class="progress-bar" id="progressBar" cx="60" cy="60" r="54" />
+                    </svg>
+                    <div class="progress-text">
+                        <span class="progress-val" id="progressVal">0%</span>
+                        <span class="progress-label" id="progressLabel">Gönderilen</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Details List -->
+            <div class="status-right">
+                <div class="info-row">
+                    <span class="info-label">Lisans Anahtarı:</span>
+                    <span class="info-value text-glow-cyan" id="dispKey">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Hedef Kanal:</span>
+                    <span class="info-value" id="dispChannel">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Tanımlı Paket:</span>
+                    <span class="info-value" id="dispPackage">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Durum:</span>
+                    <span class="info-value status-badge badge-active" id="dispStatus">Yükleniyor...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Geçen Süre:</span>
+                    <span class="info-value" id="dispTime">00:00</span>
+                </div>
+                
+                <div class="status-actions">
+                    <button class="btn-stop" id="btnStop" onclick="stopBot()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        </svg>
+                        Gönderimi Durdur
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Actions Menu -->
+    <!-- Floating Shop Button -->
+    <a href="shop.html" class="shop-float" id="btn-shop">
+        <svg viewBox="0 0 24 24" fill="none" class="shop-float-icon">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 1"></circle>
+            <circle cx="12" cy="12" r="8" stroke="#ffb03b" stroke-width="1.2"></circle>
+            <circle cx="12" cy="12" r="6" fill="rgba(255, 176, 59, 0.1)"></circle>
+            <path d="M12 8.5v7M13.5 10h-2.5a1.2 1.2 0 1 0 0 2.4h2a1.2 1.2 0 1 1 0 2.4H10.5" stroke="#ffb03b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="shop-float-tooltip">Mağaza</span>
+    </a>
+
+    <!-- Floating Home Button -->
+    <a href="index.html" class="home-float" id="btn-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="home-float-icon">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="home-float-tooltip">Ana Sayfa</span>
+    </a>
+
+    <!-- Floating Discord Button -->
+    <a href="https://discord.gg/cqBWSYWZaZ" target="_blank" rel="noopener noreferrer" class="discord-float" id="btn-discord">
+        <svg viewBox="0 0 127.14 96.36" class="discord-float-icon">
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.9-.65,1.76-1.34,2.58-2.06a75.48,75.48,0,0,0,72.76,0c.82.72,1.68,1.41,2.58,2.06a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.87,50.78,124,27.93,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.9,46,53.9,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.14,46,96.14,53,91,65.69,84.69,65.69Z"></path>
+        </svg>
+        <span class="discord-float-tooltip">Discord'a Katıl</span>
+    </a>
+
+    <script>
+        // Extract Key from URL Query Parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const licenseKey = urlParams.get('key');
+
+        if (!licenseKey) {
+            alert('Lütfen geçerli bir lisans anahtarı ile giriş yapın.');
+            window.location.href = 'shop.html';
+        }
+
+        const progressBar = document.getElementById('progressBar');
+        const progressVal = document.getElementById('progressVal');
+        const dispKey = document.getElementById('dispKey');
+        const dispChannel = document.getElementById('dispChannel');
+        const dispPackage = document.getElementById('dispPackage');
+        const dispStatus = document.getElementById('dispStatus');
+        const dispTime = document.getElementById('dispTime');
+        const btnStop = document.getElementById('btnStop');
+
+        dispKey.innerText = licenseKey.toUpperCase().trim();
+
+        // Circular progress configuration
+        const radius = 54;
+        const circumference = 2 * Math.PI * radius; // ~339.292
+        progressBar.style.strokeDasharray = circumference;
+
+        function setProgress(percent) {
+            const offset = circumference - (percent / 100) * circumference;
+            progressBar.style.strokeDashoffset = offset;
+            progressVal.innerText = percent + '%';
+        }
+
+        // Timer formatting helper
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        // Fetch live bot status from backend
+        let updateInterval;
+
+        function updateBotStatus() {
+            fetch(`/api/bot-status?key=${encodeURIComponent(licenseKey)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    dispStatus.innerText = 'Lisans Hatalı';
+                    dispStatus.className = 'info-value status-badge badge-stopped';
+                    setProgress(0);
+                    btnStop.disabled = true;
+                    btnStop.style.opacity = '0.5';
+                    clearInterval(updateInterval);
+                    return;
+                }
+
+                // Render detail fields
+                dispChannel.innerHTML = `<a href="https://kick.com/${data.channel}" target="_blank" class="channel-link">kick.com/${data.channel}</a>`;
+                dispPackage.innerText = `KICK ${data.targetViewers} İzleyici`;
+                
+                // Format Status
+                if (data.status === 'Gönderiliyor') {
+                    dispStatus.innerText = 'GÖNDERİLİYOR';
+                    dispStatus.className = 'info-value status-badge badge-active';
+                    btnStop.disabled = false;
+                    btnStop.style.opacity = '1';
+                    progressBar.style.stroke = '#00f0ff';
+                    progressBar.style.filter = 'drop-shadow(0 0 8px rgba(0, 240, 255, 0.5))';
+                    progressVal.style.color = '#00f0ff';
+                    progressVal.style.textShadow = '0 0 10px rgba(0, 240, 255, 0.3)';
+                    document.getElementById('progressLabel').innerText = `${data.currentViewers} / ${data.targetViewers}`;
+                } else {
+                    dispStatus.innerText = 'DURDURULDU';
+                    dispStatus.className = 'info-value status-badge badge-stopped';
+                    btnStop.disabled = true;
+                    btnStop.style.opacity = '0.5';
+                    // Set stroke color of progress bar to red
+                    progressBar.style.stroke = 'var(--accent-red)';
+                    progressBar.style.filter = 'drop-shadow(0 0 8px rgba(255, 42, 42, 0.5))';
+                    progressVal.style.color = 'var(--accent-red)';
+                    progressVal.style.textShadow = '0 0 10px rgba(255, 42, 42, 0.3)';
+                    document.getElementById('progressLabel').innerText = 'Durduruldu';
+                }
+
+                // Set values
+                setProgress(data.percent);
+                dispTime.innerText = formatTime(data.elapsed);
+            })
+            .catch(err => {
+                console.error('Error fetching bot status:', err);
+            });
+        }
+
+        // Stop Bot execution
+        function stopBot() {
+            if (!confirm('Bot gönderimini sonlandırmak istediğinizden emin misiniz?')) {
+                return;
+            }
+
+            btnStop.disabled = true;
+            btnStop.innerText = 'Durduruluyor...';
+
+            fetch('/api/stop-bot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ licenseKey: licenseKey })
+            })
+            .then(res => res.json())
+            .then(data => {
+                btnStop.innerText = 'Gönderimi Durdur';
+                updateBotStatus();
+            })
+            .catch(err => {
+                btnStop.disabled = false;
+                btnStop.innerText = 'Gönderimi Durdur';
+                console.error('Error stopping bot:', err);
+                alert('Gönderim durdurulurken bir hata oluştu.');
+            });
+        }
+
+        // Start polling
+        updateBotStatus();
+        updateInterval = setInterval(updateBotStatus, 2000);
+    </script>
+</body>
+</html>
